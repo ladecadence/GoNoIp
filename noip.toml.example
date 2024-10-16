@@ -1,0 +1,12 @@
+[[hosts]]
+    update_url = "https://dynupdate.no-ip.com/nic/update"
+    username = "username@email.com"
+    password = "password"
+    hostname = "example.servehttp.com"
+    offline = "NO"
+[[hosts]]
+    update_url = "https://dynupdate.no-ip.com/nic/update"
+    username = "otheruser@email.net"
+    password = "secure"
+    hostname = test.serveftp.com"
+    offline = "YES"
