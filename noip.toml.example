@@ -4,9 +4,10 @@
     password = "password"
     hostname = "example.servehttp.com"
     offline = "NO"
+    ip = "10.20.30.40" # Fixed IP
 [[hosts]]
     update_url = "https://dynupdate.no-ip.com/nic/update"
     username = "otheruser@email.net"
     password = "secure"
     hostname = test.serveftp.com"
-    offline = "YES"
+    offline = "YES" # Server is temporarily offline
