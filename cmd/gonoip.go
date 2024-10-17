@@ -25,6 +25,17 @@ func main() {
 		os.Exit(1)
 	}
 
+	// check config file permissions
+	fileInfo, err := os.Stat(*configFile)
+	if err != nil {
+		fmt.Printf("Error accessing config file: %v", err)
+		os.Exit(1)
+	}
+	if fileInfo.Mode()&(1<<2) != 0 {
+		fmt.Printf("Config file is world readable, change permissions.\n")
+		os.Exit(1)
+	}
+
 	config, err := config.GetConfig(*configFile)
 	if err != nil {
 		fmt.Printf("Config file error: %s\n", err.Error())
