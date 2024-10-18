@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/ladecadence/GoNoIp/pkg/config"
 	"github.com/ladecadence/GoNoIp/pkg/update"
@@ -50,9 +51,18 @@ func main() {
 	} else {
 		// launch threads
 		for _, host := range config.Hosts {
-			ok := update.Update(host)
-			log.Printf("Host: %s : %s\n", host.Hostname, ok)
+			go doUpdates(host)
 		}
 	}
+}
 
+func doUpdates(host config.Host) {
+	for {
+		// launch update
+		ok := update.Update(host)
+		log.Printf("Host: %s : %s\n", host.Hostname, ok)
+
+		// wait
+		time.Sleep(time.Second * time.Duration(host.UpdateTime))
+	}
 }
