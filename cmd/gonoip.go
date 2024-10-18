@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/ladecadence/GoNoIp/pkg/config"
 	"github.com/ladecadence/GoNoIp/pkg/update"
 )
+
+var wg sync.WaitGroup
 
 func main() {
 	// check args
@@ -51,12 +54,16 @@ func main() {
 	} else {
 		// launch threads
 		for _, host := range config.Hosts {
+			wg.Add(1)
 			go doUpdates(host)
 		}
+		// let threads run
+		wg.Wait()
 	}
 }
 
 func doUpdates(host config.Host) {
+	defer wg.Done()
 	for {
 		// launch update
 		ok := update.Update(host)
