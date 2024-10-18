@@ -3,6 +3,7 @@ package update
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 
@@ -36,7 +37,7 @@ func Update(host config.Host) NoIPCode {
 	// create request
 	request, err := http.NewRequest(http.MethodGet, requestURL, nil)
 	if err != nil {
-		fmt.Printf("client: could not create request: %s\n", err)
+		log.Printf("client: could not create request: %s\n", err)
 		return NoIPCodeUnknown
 	}
 
@@ -46,14 +47,14 @@ func Update(host config.Host) NoIPCode {
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
-		fmt.Printf("client: error making http request: %s\n", err)
+		log.Printf("client: error making http request: %s\n", err)
 		return NoIPCodeUnknown
 	}
 
 	// check response
 	resBody, err := io.ReadAll(response.Body)
 	if err != nil {
-		fmt.Printf("client: could not read response body: %s\n", err)
+		log.Printf("client: could not read response body: %s\n", err)
 		return NoIPCodeUnknown
 	}
 	code := strings.Split(strings.TrimSpace(string(resBody)), " ")
