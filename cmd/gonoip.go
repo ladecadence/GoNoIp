@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/ladecadence/GoNoIp/pkg/config"
@@ -28,26 +29,29 @@ func main() {
 	// check config file permissions
 	fileInfo, err := os.Stat(*configFile)
 	if err != nil {
-		fmt.Printf("Error accessing config file: %v", err)
+		log.Printf("Error accessing config file: %v", err)
 		os.Exit(1)
 	}
 	if fileInfo.Mode()&(1<<2) != 0 {
-		fmt.Printf("Config file is world readable, change permissions.\n")
+		log.Printf("Config file is world readable, change permissions.\n")
 		os.Exit(1)
 	}
 
 	config, err := config.GetConfig(*configFile)
 	if err != nil {
-		fmt.Printf("Config file error: %s\n", err.Error())
+		log.Printf("Config file error: %s\n", err.Error())
 		os.Exit(1)
 	}
 
+	// run
 	if *testMode {
-		fmt.Println("test file ok")
+		// if we reach here, config file is OK
+		log.Println("test file ok")
 	} else {
+		// launch threads
 		for _, host := range config.Hosts {
 			ok := update.Update(host)
-			fmt.Printf("Host: %s : %s\n", host.Hostname, ok)
+			log.Printf("Host: %s : %s\n", host.Hostname, ok)
 		}
 	}
 
